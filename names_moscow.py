@@ -27,7 +27,7 @@ def names_table():
     accepted_years = range(2015, current_year + 1)
     try:
         year = int(request.args.get('year')) if int(request.args.get('year')) in accepted_years else 2017
-    except:
+    except (ValueError, TypeError):
         year = 2017
     names_data = get_names(names_from)
     header = '<table>' \
@@ -38,17 +38,17 @@ def names_table():
            '        <th>Количество</th>' \
            '    </tr>'
     row = ''
-    for i in range(len(names_data)):
-        if int(names_data[i]['Cells']['Year']) == year:
+    for name_data in names_data:
+        if int(name_data['Cells']['Year']) == year:
             row += '<tr>' \
                    '    <td>%(Year)s</td>' \
                    '    <td>%(Month)s</td>' \
                    '    <td>%(Name)s</td>' \
                    '    <td>%(NumberOfPersons)s</td>' \
-                   '</tr>' % names_data[i]['Cells']
+                   '</tr>' % name_data['Cells']
 
     end = '</table>'
-    return header + row + end
+    return '{} {} {}'.format(header, row, end)
 
 
 if __name__ == '__main__':

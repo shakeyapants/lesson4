@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, request
+from flask import Flask, request, abort
 from moscow_API import API_KEY
 from datetime import date
 
@@ -14,7 +14,7 @@ def get_names(url):
     if result.status_code == 200:
         return result.json()
     else:
-        print('Something went wrong')
+        abort(404)
 
 
 @app.route('/')
